@@ -1,0 +1,20 @@
+on:
+  push:
+  pull_request:
+    branches:
+      - master
+jobs:
+  image:
+    name: Build docker image
+    container: samtebbs33/zig-fork_llvm-13:latest
+    runs-on: ubuntu-18.04
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Build zig
+      run: |
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_LINKER=lld
+        make install -j 1
